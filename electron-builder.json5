@@ -13,10 +13,20 @@
   ],
   "mac": {
     "target": [
-      "dmg"
+      {
+        "target": "dmg",
+        "arch": [
+          "universal"
+        ]
+      }
     ],
-    "artifactName": "${productName}-Mac-${version}-Installer.${ext}"
-  },
+
+    "category": "public.app-category.business",
+
+    "artifactName": "${productName}-Mac-${version}.${ext}",
+
+    "icon": "build/icon.icns"
+}
   "win": {
     "target": [
       {
@@ -25,9 +35,8 @@
           "x64"
         ]
       }
-    ],
-    "artifactName": "${productName}-Windows-${version}-Setup.${ext}"
-  },
+    ]
+}
   "nsis": {
     "oneClick": false,
     "perMachine": false,

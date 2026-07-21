@@ -1,52 +1,50 @@
 // @see - https://www.electron.build/configuration/configuration
 {
-  "$schema": "https://raw.githubusercontent.com/electron-userland/electron-builder/master/packages/app-builder-lib/scheme.json",
-  "appId": "YourAppID",
-  "asar": true,
-  "productName": "YourAppName",
-  "directories": {
-    "output": "release/${version}"
+  $schema: 'https://raw.githubusercontent.com/electron-userland/electron-builder/master/packages/app-builder-lib/scheme.json',
+
+  appId: 'id.dailyapp.payslip',
+  productName: 'DailyApp Pay Slip',
+
+  asar: true,
+
+  directories: {
+    output: 'release/${version}',
   },
-  "files": [
-    "dist",
-    "dist-electron"
-  ],
-  "mac": {
-    "target": [
+
+  files: ['dist', 'dist-electron'],
+
+  mac: {
+    target: [
       {
-        "target": "dmg",
-        "arch": [
-          "universal"
-        ]
-      }
+        target: 'dmg',
+        arch: ['universal'],
+      },
     ],
-
-    "category": "public.app-category.business",
-
-    "artifactName": "${productName}-Mac-${version}.${ext}",
-
-    "icon": "build/icon.icns"
-}
-  "win": {
-    "target": [
-      {
-        "target": "nsis",
-        "arch": [
-          "x64"
-        ]
-      }
-    ]
-}
-  "nsis": {
-    "oneClick": false,
-    "perMachine": false,
-    "allowToChangeInstallationDirectory": true,
-    "deleteAppDataOnUninstall": false
+    category: 'public.app-category.business',
+    artifactName: '${productName}-Mac-${version}.${ext}',
+    icon: 'build/icon.icns',
   },
-  "linux": {
-    "target": [
-      "AppImage"
+
+  win: {
+    target: [
+      {
+        target: 'nsis',
+        arch: ['x64'],
+      },
     ],
-    "artifactName": "${productName}-Linux-${version}.${ext}"
-  }
+    artifactName: '${productName}-Windows-${version}.${ext}',
+    icon: 'build/icon.ico',
+  },
+
+  nsis: {
+    oneClick: false,
+    perMachine: false,
+    allowToChangeInstallationDirectory: true,
+    deleteAppDataOnUninstall: false,
+  },
+
+  linux: {
+    target: ['AppImage'],
+    artifactName: '${productName}-Linux-${version}.${ext}',
+  },
 }

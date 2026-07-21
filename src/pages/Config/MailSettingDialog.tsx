@@ -38,8 +38,8 @@ export default function ExcelTemplateList() {
   }, []);
 
   const loadData = async () => {
-    const data = await ExcelTemplateService.get('');
-    setRows(data ? [data] : []);
+    const data = await ExcelTemplateService.getAll();
+    setRows(data);
   };
 
   const filteredRows = useMemo(() => {

@@ -1,28 +1,28 @@
-// import { MailSetting } from '../types/MailSetting';
+import { MailSetting } from '../types/MailSetting';
 
-// export const mailSettingMock: MailSetting[] = [
-//   {
-//     id: 1,
+export const mailSettingMock: MailSetting[] = [
+  {
+    id: 1,
 
-//     companyId: 1,
-//     companyName: 'PT RIN Group Indonesia',
+    companyId: 1,
+    companyName: 'PT RIN Group Indonesia',
 
-//     senderName: 'HRD',
+    senderName: 'HRD',
 
-//     senderEmail: 'hr@ringroup.co.id',
+    senderEmail: 'hr@ringroup.co.id',
 
-//     smtpHost: 'smtp.gmail.com',
+    smtpHost: 'smtp.gmail.com',
 
-//     smtpPort: 587,
+    smtpPort: 587,
 
-//     username: 'hr@ringroup.co.id',
+    username: 'hr@ringroup.co.id',
 
-//     password: '********',
+    password: '********',
 
-//     ssl: false,
+    ssl: false,
 
-//     tls: true,
+    tls: true,
 
-//     active: true,
-//   },
-// ];
+    active: true,
+  },
+];

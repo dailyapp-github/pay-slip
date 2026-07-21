@@ -10,6 +10,9 @@ jobs:
   build-windows:
     runs-on: windows-latest
 
+    env:
+      GH_TOKEN: ${{ secrets.GH_TOKEN }}
+
     steps:
       - name: Checkout Source
         uses: actions/checkout@v4
@@ -34,6 +37,8 @@ jobs:
 
   build-macos:
     runs-on: macos-latest
+    env:
+      GH_TOKEN: ${{ secrets.GH_TOKEN }}
 
     steps:
       - name: Checkout Source

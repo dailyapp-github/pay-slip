@@ -67,23 +67,31 @@ export default function CompanyList() {
     setOpenDelete(true);
   };
 
-  const refreshData = async () => {
-    const data = await CompanyService.getAll();
-    setRows(data);
-  };
+  // const refreshData = async () => {
+  //   const data = await CompanyService.getAll();
+  //   setRows(data);
+  // };
 
   const handleSave = async (company: Company) => {
-    console.log('COMPANY', company);
-    if (!company._id) {
-      await CompanyService.create(company);
-    } else {
-      await CompanyService.update(company);
+    try {
+      if (!company._id) {
+        await CompanyService.create(company);
+      } else {
+        await CompanyService.update(company);
+      }
+
+      await loadData();
+
+      showSnackbar('Company saved successfully', 'success');
+
+      setOpenDialog(false);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
+      showSnackbar(
+        err?.response?.data?.message || 'Failed to save company',
+        'error',
+      );
     }
-
-    await refreshData();
-    showSnackbar('Company saved successfully', 'success');
-
-    setOpenDialog(false);
   };
 
   const confirmDelete = async () => {
@@ -91,7 +99,7 @@ export default function CompanyList() {
 
     await CompanyService.delete(deleteCompany._id!);
 
-    await refreshData();
+    await loadData();
 
     setOpenDelete(false);
     setDeleteCompany(null);

@@ -5,7 +5,7 @@ import { useAuth } from '../context/AuthContext';
 export default function Header() {
   const navigate = useNavigate();
 
-  const { user, logout } = useAuth();
+  const { logout } = useAuth();
 
   const handleLogout = () => {
     logout();
@@ -27,7 +27,7 @@ export default function Header() {
         borderBottom: '1px solid #e0e0e0',
       }}
     >
-      <Typography variant="h6">Payroll Mailer</Typography>
+      <Typography variant="h6">{''}</Typography>
 
       <Box
         sx={{
@@ -36,7 +36,7 @@ export default function Header() {
           gap: 2,
         }}
       >
-        <Typography>{user?.username}</Typography>
+        {/* <Typography>{user?.username}</Typography> */}
 
         <Button variant="outlined" color="error" onClick={handleLogout}>
           Logout

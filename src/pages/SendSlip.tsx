@@ -1,15 +1,3 @@
-// import { Typography } from '@mui/material';
-
-// export default function SendSlip() {
-//   return (
-//     <>
-//       <Typography variant="h4">Send Slip</Typography>
-
-//       <Typography>Send Slip Page</Typography>
-//     </>
-//   );
-// }
-
 import { useState } from 'react';
 import { Box, Paper, Typography, Button } from '@mui/material';
 import UploadFileIcon from '@mui/icons-material/UploadFile';

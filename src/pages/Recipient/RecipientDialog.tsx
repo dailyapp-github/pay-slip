@@ -29,7 +29,7 @@ const emptyRecipient: Recipient = {
   nik: '',
   name: '',
   email: '',
-  password: '',
+  pdfPassword: '',
   active: true,
 };
 
@@ -92,7 +92,7 @@ export default function RecipientDialog({
       return;
     }
 
-    if (!form.password.trim()) {
+    if (!form.pdfPassword.trim()) {
       alert('Password PDF is required');
       return;
     }
@@ -143,8 +143,8 @@ export default function RecipientDialog({
 
           <TextField
             label="PDF Password"
-            value={form.password}
-            onChange={handleChange('password')}
+            value={form.pdfPassword}
+            onChange={handleChange('pdfPassword')}
             helperText="Example: 1996-05-10"
             fullWidth
           />

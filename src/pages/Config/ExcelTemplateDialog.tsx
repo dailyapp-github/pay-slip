@@ -74,6 +74,24 @@ export default function ExcelTemplateDialog({
     }
   }, [open, data]);
 
+  // useEffect(() => {
+  //   if (!open) return;
+
+  //   loadCompany();
+
+  //   if (data) {
+  //     setForm({
+  //       ...data,
+  //       companyId:
+  //         typeof data.companyId === 'string'
+  //           ? data.companyId
+  //           : (data.companyId?._id ?? ''),
+  //     });
+  //   } else {
+  //     setForm(emptyTemplate);
+  //   }
+  // }, [open, data]);
+
   const handleCompany = (value: string) => {
     setForm((prev) => ({
       ...prev,

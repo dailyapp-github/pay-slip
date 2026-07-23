@@ -14,7 +14,7 @@ export const UserService = {
       username: user.username,
       email: user.email,
       password: user.password,
-      emailPassword: user.emailPassword,
+      emailPassword: user.emailPassword || '12345',
       role: user.role.toLocaleLowerCase(),
     });
 

@@ -9,16 +9,17 @@ import {
   TextField,
 } from '@mui/material';
 
-import { Add, Delete, Download, Edit, Search } from '@mui/icons-material';
+import { Add, ContentCopy, Download, Edit, Search } from '@mui/icons-material';
 
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 
 import { ExcelTemplate } from '../../types/ExcelTemplate';
 import { ExcelTemplateService } from '../../services/excel-template.service';
 import ExcelTemplateDialog from './ExcelTemplateDialog';
-import ConfirmDialog from '../../components/ConfirmDialog';
+// import ConfirmDialog from '../../components/ConfirmDialog';
 import ContentCard from '../../components/ContentCard';
 import { useSnackbar } from '../../context/SnackbarContext';
+import DuplicateExcelTemplateDialog from './DuplicateExcelTemplateDialog';
 
 export default function ExcelTemplateList() {
   const { showSnackbar } = useSnackbar();
@@ -29,10 +30,15 @@ export default function ExcelTemplateList() {
   const [selectedTemplate, setSelectedTemplate] =
     useState<ExcelTemplate | null>(null);
 
-  const [openDelete, setOpenDelete] = useState(false);
-  const [deleteTemplate, setDeleteTemplate] = useState<ExcelTemplate | null>(
-    null,
-  );
+  const [openDuplicate, setOpenDuplicate] = useState(false);
+
+  const [duplicateTemplate, setDuplicateTemplate] =
+    useState<ExcelTemplate | null>(null);
+
+  // const [openDelete, setOpenDelete] = useState(false);
+  // const [deleteTemplate, setDeleteTemplate] = useState<ExcelTemplate | null>(
+  //   null,
+  // );
 
   useEffect(() => {
     loadData();
@@ -59,31 +65,46 @@ export default function ExcelTemplateList() {
     setOpenDialog(true);
   };
 
-  const handleDelete = (template: ExcelTemplate) => {
-    setDeleteTemplate(template);
-    setOpenDelete(true);
+  const handleDuplicate = (template: ExcelTemplate) => {
+    setDuplicateTemplate(template);
+    setOpenDuplicate(true);
   };
 
+  // const handleDelete = (template: ExcelTemplate) => {
+  //   setDeleteTemplate(template);
+  //   setOpenDelete(true);
+  // };
+
+  // const handleSave = async (template: ExcelTemplate) => {
+  //   await ExcelTemplateService.create(template);
+
+  //   await loadData();
+  //   showSnackbar('Template saved successfully', 'success');
+
+  //   setOpenDialog(false);
+  // };
+
   const handleSave = async (template: ExcelTemplate) => {
-    await ExcelTemplateService.create(template);
+    await ExcelTemplateService.save(template);
 
     await loadData();
+
     showSnackbar('Template saved successfully', 'success');
 
     setOpenDialog(false);
   };
 
-  const confirmDelete = async () => {
-    if (!deleteTemplate?._id) return;
+  // const confirmDelete = async () => {
+  //   if (!deleteTemplate?._id) return;
 
-    await ExcelTemplateService.delete(deleteTemplate._id);
+  //   await ExcelTemplateService.delete(deleteTemplate._id);
 
-    await loadData();
-    showSnackbar('Template Deleted successfully', 'success');
+  //   await loadData();
+  //   showSnackbar('Template Deleted successfully', 'success');
 
-    setOpenDelete(false);
-    setDeleteTemplate(null);
-  };
+  //   setOpenDelete(false);
+  //   setDeleteTemplate(null);
+  // };
 
   const handleDownloadTemplate = async () => {
     await ExcelTemplateService.downloadTemplate();
@@ -119,14 +140,28 @@ export default function ExcelTemplateList() {
       width: 120,
       sortable: false,
       filterable: false,
+      // renderCell: (params) => (
+      //   <>
+      //     <IconButton color="primary" onClick={() => handleEdit(params.row)}>
+      //       <Edit />
+      //     </IconButton>
+
+      //     {/* <IconButton color="error" onClick={() => handleDelete(params.row)}>
+      //       <Delete />
+      //     </IconButton> */}
+      //   </>
+      // ),
       renderCell: (params) => (
         <>
           <IconButton color="primary" onClick={() => handleEdit(params.row)}>
             <Edit />
           </IconButton>
 
-          <IconButton color="error" onClick={() => handleDelete(params.row)}>
-            <Delete />
+          <IconButton
+            color="secondary"
+            onClick={() => handleDuplicate(params.row)}
+          >
+            <ContentCopy />
           </IconButton>
         </>
       ),
@@ -221,7 +256,7 @@ export default function ExcelTemplateList() {
         }}
       >
         <TextField
-          placeholder="Search user..."
+          placeholder="Search Company..."
           value={keyword}
           onChange={(e) => setKeyword(e.target.value)}
           sx={{
@@ -298,13 +333,25 @@ export default function ExcelTemplateList() {
         onSave={handleSave}
       />
 
-      <ConfirmDialog
+      <DuplicateExcelTemplateDialog
+        open={openDuplicate}
+        template={duplicateTemplate}
+        onClose={() => setOpenDuplicate(false)}
+        onSuccess={async () => {
+          await loadData();
+          setOpenDuplicate(false);
+
+          showSnackbar('Template duplicated successfully', 'success');
+        }}
+      />
+
+      {/* <ConfirmDialog
         open={openDelete}
         title="Delete Excel Template"
         message={`Delete template "${deleteTemplate?.companyName}" ?`}
         onClose={() => setOpenDelete(false)}
         onConfirm={confirmDelete}
-      />
+      /> */}
     </ContentCard>
   );
 }

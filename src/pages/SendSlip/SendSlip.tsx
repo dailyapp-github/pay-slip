@@ -34,6 +34,7 @@ import PageHeader from '../../components/PageHeader';
 import ContentCard from '../../components/ContentCard';
 import { useSnackbar } from '../../context/SnackbarContext';
 import { useLoading } from '../../context/LoadingContext';
+import { GridRowSelectionModel } from '@mui/x-data-grid';
 
 type WorkflowStatus = 'idle' | 'preview' | 'generated' | 'completed';
 
@@ -72,6 +73,11 @@ export default function SendSlip() {
     null,
   );
 
+  const [selectedRows, setSelectedRows] = useState<GridRowSelectionModel>({
+    type: 'include',
+    ids: new Set(),
+  });
+
   useEffect(() => {
     loadCompany();
   }, []);
@@ -104,6 +110,21 @@ export default function SendSlip() {
       setPreview(result);
 
       setPreviewId(result.previewId);
+      const defaultSelected = result.rows
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        .map((row: any, index: number) => ({
+          row,
+          index,
+        }))
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        .filter((x: any) => x.row.status === 'READY')
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        .map((x: any) => x.index);
+
+      setSelectedRows({
+        type: 'include',
+        ids: new Set(defaultSelected),
+      });
       setWorkflow('preview');
       showSnackbar('Rewiew File successfully', 'success');
     } catch (err) {
@@ -135,14 +156,30 @@ export default function SendSlip() {
     try {
       showLoading('Generating PDF', 'Please wait...');
 
-      const result = await SendSlipService.generate(previewId);
+      // const result = await SendSlipService.generate(previewId);
+      const result = await SendSlipService.generate(
+        previewId,
+        Array.from(selectedRows.ids),
+      );
 
       setGenerateResult(result);
       setWorkflow('generated');
 
-      showSnackbar(
-        `Generate PDF completed successfully.\n\nTotal : ${result.total}\nSuccess : ${result.success}\nFailed : ${result.failed}`,
-      );
+      console.log('RES', result);
+
+      if (result.failed === 0 && result.success == 0) {
+        showSnackbar(`Tidak ada PDF yang berhasil dibuat`, 'error');
+      } else if (result.success === result.total) {
+        showSnackbar(
+          `Generate PDF berhasil (${result.success}/${result.total})`,
+          'success',
+        );
+      } else {
+        showSnackbar(
+          `Generate selesai. Berhasil ${result.success}, gagal ${result.failed}`,
+          'warning',
+        );
+      }
     } catch (err) {
       console.error(err);
       showSnackbar('Failed to Generate PDF', 'error');
@@ -155,12 +192,29 @@ export default function SendSlip() {
     try {
       showLoading('Sending Email', 'Please wait...');
 
-      const result = await SendSlipService.send(previewId);
+      // const result = await SendSlipService.send(previewId);
+
+      const result = await SendSlipService.send(
+        previewId,
+        Array.from(selectedRows.ids),
+      );
 
       console.log(result);
       setWorkflow('completed');
 
-      showSnackbar('Email sent successfully', 'success');
+      if (result.failed === 0 && result.success == 0) {
+        showSnackbar(`Tidak ada email yang berhasil dikirim`, 'error');
+      } else if (result.success === result.total) {
+        showSnackbar(
+          `Email berhasil dikirim (${result.success}/${result.total})`,
+          'success',
+        );
+      } else {
+        showSnackbar(
+          `Email selesai. Berhasil ${result.success}, gagal ${result.failed}`,
+          'warning',
+        );
+      }
     } catch (err) {
       console.error(err);
       showSnackbar('Failed to Email sent', 'error');
@@ -645,7 +699,11 @@ export default function SendSlip() {
               }}
               rows={rows}
               columns={columns}
+              checkboxSelection
               disableRowSelectionOnClick
+              rowSelectionModel={selectedRows}
+              onRowSelectionModelChange={(ids) => setSelectedRows(ids)}
+              isRowSelectable={(params) => params.row.status === 'READY'}
               pageSizeOptions={[10, 25, 50]}
               autoHeight={false}
               initialState={{

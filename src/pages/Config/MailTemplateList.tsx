@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 import { Chip, IconButton } from '@mui/material';
 
-import { Edit } from '@mui/icons-material';
+import { ContentCopy, Edit } from '@mui/icons-material';
 
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 
@@ -12,6 +12,7 @@ import { MailTemplateService } from '../../services/mail-template.service';
 import MailTemplateDialog from './MailTemplateDialog';
 import ContentCard from '../../components/ContentCard';
 import { useSnackbar } from '../../context/SnackbarContext';
+import MailTemplateDuplicateDialog from './MailTemplateDuplicateDialog';
 
 interface CompanyTemplate extends Company {
   configured: boolean;
@@ -24,6 +25,11 @@ export default function MailTemplateList() {
     useState<CompanyTemplate | null>(null);
 
   const [openDialog, setOpenDialog] = useState(false);
+
+  const [openDuplicate, setOpenDuplicate] = useState(false);
+
+  const [duplicateCompany, setDuplicateCompany] =
+    useState<CompanyTemplate | null>(null);
 
   useEffect(() => {
     loadData();
@@ -70,6 +76,25 @@ export default function MailTemplateList() {
     loadData();
   };
 
+  const handleDuplicate = async (
+    destinationCompanyIds: string[],
+    overwrite: boolean,
+  ) => {
+    if (!duplicateCompany?._id) return;
+
+    await MailTemplateService.duplicate(
+      duplicateCompany._id,
+      destinationCompanyIds,
+      overwrite,
+    );
+
+    showSnackbar('Template duplicated successfully', 'success');
+
+    setOpenDuplicate(false);
+
+    loadData();
+  };
+
   const columns: GridColDef[] = [
     {
       field: 'name',
@@ -98,10 +123,27 @@ export default function MailTemplateList() {
       headerName: 'Action',
       width: 120,
       sortable: false,
+      // renderCell: (params) => (
+      //   <IconButton color="primary" onClick={() => handleEdit(params.row)}>
+      //     <Edit />
+      //   </IconButton>
+      // ),
       renderCell: (params) => (
-        <IconButton color="primary" onClick={() => handleEdit(params.row)}>
-          <Edit />
-        </IconButton>
+        <>
+          <IconButton color="primary" onClick={() => handleEdit(params.row)}>
+            <Edit />
+          </IconButton>
+
+          <IconButton
+            color="secondary"
+            onClick={() => {
+              setDuplicateCompany(params.row);
+              setOpenDuplicate(true);
+            }}
+          >
+            <ContentCopy />
+          </IconButton>
+        </>
       ),
     },
   ];
@@ -148,6 +190,12 @@ export default function MailTemplateList() {
         company={selectedCompany}
         onClose={() => setOpenDialog(false)}
         onSave={handleSave}
+      />
+      <MailTemplateDuplicateDialog
+        open={openDuplicate}
+        company={duplicateCompany}
+        onClose={() => setOpenDuplicate(false)}
+        onDuplicate={handleDuplicate}
       />
     </ContentCard>
   );

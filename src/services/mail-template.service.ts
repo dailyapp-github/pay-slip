@@ -18,4 +18,17 @@ export const MailTemplateService = {
 
     return response.data.data;
   },
+  async duplicate(
+    sourceCompanyId: string,
+    destinationCompanyIds: string[],
+    overwrite: boolean,
+  ) {
+    const response = await api.post(`${API.MAIL_TEMPLATE}/duplicate`, {
+      sourceCompanyId,
+      destinationCompanyIds,
+      overwrite,
+    });
+
+    return response.data.data;
+  },
 };

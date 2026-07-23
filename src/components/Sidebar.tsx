@@ -1,67 +1,3 @@
-// import { List, ListItemButton, ListItemText, Paper } from '@mui/material';
-
-// import { Settings, People, Send } from '@mui/icons-material';
-
-// import { useNavigate, useLocation } from 'react-router-dom';
-
-// export default function Sidebar() {
-//   const navigate = useNavigate();
-
-//   const location = useLocation();
-
-//   const menus = [
-//     {
-//       title: 'Config',
-//       path: '/',
-//       icon: <Settings />,
-//     },
-
-//     {
-//       title: 'Recipient',
-//       path: '/recipient',
-//       icon: <People />,
-//     },
-
-//     {
-//       title: 'Send Slip',
-//       path: '/send-slip',
-//       icon: <Send />,
-//     },
-//   ];
-
-//   return (
-//     <Paper
-//       sx={{
-//         width: 260,
-//         borderRadius: 0,
-//       }}
-//     >
-//       <h2
-//         style={{
-//           padding: 20,
-//           textAlign: 'center',
-//         }}
-//       >
-//         Pay Slip
-//       </h2>
-
-//       <List>
-//         {menus.map((menu) => (
-//           <ListItemButton
-//             key={menu.path}
-//             selected={location.pathname === menu.path}
-//             onClick={() => navigate(menu.path)}
-//           >
-//             {menu.icon}
-
-//             <ListItemText primary={menu.title} sx={{ ml: 2 }} />
-//           </ListItemButton>
-//         ))}
-//       </List>
-//     </Paper>
-//   );
-// }
-
 import {
   Avatar,
   Box,
@@ -74,7 +10,13 @@ import {
   Typography,
 } from '@mui/material';
 
-import { Settings, People, Send, AccountCircle } from '@mui/icons-material';
+import {
+  Settings,
+  People,
+  Send,
+  Assessment,
+  AccountCircle,
+} from '@mui/icons-material';
 
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
@@ -101,6 +43,12 @@ export default function Sidebar() {
       title: 'Send Slip',
       path: '/send-slip',
       icon: <Send />,
+    },
+
+    {
+      title: 'Report',
+      path: '/report',
+      icon: <Assessment />,
     },
   ];
 

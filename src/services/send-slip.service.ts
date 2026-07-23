@@ -18,17 +18,34 @@ export const SendSlipService = {
     return response.data.data;
   },
 
-  async generate(previewId: string) {
+  // async generate(previewId: string) {
+  //   const response = await api.post(`${API.SEND_SLIP}/generate`, {
+  //     previewId,
+  //   });
+
+  //   return response.data.data;
+  // },
+
+  async generate(previewId: string, selectedRows: (string | number)[]) {
     const response = await api.post(`${API.SEND_SLIP}/generate`, {
       previewId,
+      selectedRows,
     });
 
     return response.data.data;
   },
 
-  async send(previewId: string) {
+  // async send(previewId: string) {
+  //   const response = await api.post(`${API.SEND_SLIP}/send`, {
+  //     previewId,
+  //   });
+
+  //   return response.data.data;
+  // },
+  async send(previewId: string, selectedRows: (string | number)[]) {
     const response = await api.post(`${API.SEND_SLIP}/send`, {
       previewId,
+      selectedRows,
     });
 
     return response.data.data;

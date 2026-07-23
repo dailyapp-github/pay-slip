@@ -17,15 +17,10 @@ export const AuthService = {
         password,
       });
 
-      console.log('SUCCESS', response.data);
+      // console.log('SUCCESS', response.data);
       return response.data.data;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
-      alert(JSON.stringify(err));
-      alert(JSON.stringify(err?.message));
-      alert(JSON.stringify(err?.code));
-      alert(JSON.stringify(err?.name));
-
       if (err?.response) {
         console.log('STATUS', err.response.status);
         console.log('DATA', err.response.data);
